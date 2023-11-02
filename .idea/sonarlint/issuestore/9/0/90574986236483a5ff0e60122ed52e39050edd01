@@ -1,0 +1,24 @@
+
+f
+java:S2583	"DChange this condition so that it does not always evaluate to "false"(Šæ²¾şÿÿÿÿ8ÚØïØí0
+R
+java:S2154	"0Add an explicit cast to match types of operands.(Šæ²¾şÿÿÿÿ8èºïØí0
+;
+java:S2129	" Remove this "Double" constructor(Šæ²¾şÿÿÿÿ
+I
+java:S1874	".Remove this use of "Double"; it is deprecated.(Šæ²¾şÿÿÿÿ
+<
+java:S2129	"!Remove this "Integer" constructor(Šæ²¾şÿÿÿÿ
+J
+java:S1874	"/Remove this use of "Integer"; it is deprecated.(Šæ²¾şÿÿÿÿ
+>
+java:S2129"!Remove this "Integer" constructor(ìıÚ¨8íºïØí0
+L
+java:S1874"/Remove this use of "Integer"; it is deprecated.(ìıÚ¨8íºïØí0
+B
+java:S2129" Remove this "Double" constructor(ıÆÑóøÿÿÿÿ8ûƒïØí0
+P
+java:S1874".Remove this use of "Double"; it is deprecated.(ıÆÑóøÿÿÿÿ8ûƒïØí0
+M	java:S106"9Replace this use of System.out or System.err by a logger.(ïõõ	
+S	java:S106"9Replace this use of System.out or System.err by a logger.(ŞÒ—üÿÿÿÿ
+N	java:S106"9Replace this use of System.out or System.err by a logger.(ˆşÅß

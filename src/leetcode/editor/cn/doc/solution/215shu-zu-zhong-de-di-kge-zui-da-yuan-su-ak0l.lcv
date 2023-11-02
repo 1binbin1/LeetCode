@@ -1,0 +1,37 @@
+### 解题思路
+
+就是一个降序排列返回第k-1个数
+注释掉的两行是使用python内置函数的偷懒写法，学过py的人都能想到，这里就不再赘述
+介绍一种O(n)复杂度的排序方法，快速排序，也叫基数排序
+其思想主要用到了D&C分治思想
+**排序实现**
+选取一个基数pivot,这里选的是数组第一个数，实际上可以任意选择(基数排序的性能高度依赖于基准值)
+那么选取一个基数后，我们就可以将数组分为三部分，比pivot小的，pivot，比pivot大的
+我们再对分好的三个数组再次重复上述操作，即：选基数，再分为三部分
+再递归调用该排序函数即可排序完成
+递归的基线条件就是:len(nums)<2，因为当数组长度小于2时就无法再分为三部分了
+
+### 代码
+
+* python3
+
+```python
+class Solution:
+    def findKthLargest(self, nums: List[int], k: int) -> int:
+        # nums.sort(reverse=True)
+        # return nums[k-1]
+        def quicksort(nums:list)->list:
+            if len(nums) < 2:
+                return nums
+            else:
+                pivot = nums[0]
+                small_list = [i for i in nums[1::] if i<= pivot]
+                big_list = [i for i in nums[1::] if i > pivot]
+                return quicksort(big_list) +[pivot] + quicksort(small_list)
+                # 这里按照降序排列
+        nums = quicksort(nums)
+        return nums[k-1]
+
+```
+
+![快排.jpg](https://pic.leetcode.cn/1686665618-Binwfk-%E5%BF%AB%E6%8E%92.jpg)

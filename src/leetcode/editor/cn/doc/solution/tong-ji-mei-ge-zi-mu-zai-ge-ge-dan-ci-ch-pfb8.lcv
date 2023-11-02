@@ -1,0 +1,32 @@
+### 解题思路
+
+统计每个字母在各个单词出现的最高频次
+
+### 代码
+
+* java
+
+```java
+// 方法一：统计每个字母在各个单词出现的最高频次 
+class Solution {
+    public int minNumBooths(String[] demand) {
+        int[] cnt = new int[26];
+        for (int i = 0; i < demand.length; i++) {
+            int[] num = new int[26];
+            for (char c : demand[i].toCharArray()) {
+                num[c - 'a']++;
+            }
+            for (int j = 0; j < 26; j++) {
+                cnt[j] = Math.max(cnt[j], num[j]);
+            }
+        }
+        // int ans = 0;
+        // for (int i = 0; i < 26; i++) {
+        //     ans += cnt[i];
+        // }
+        // return ans;
+        return Arrays.stream(cnt).sum();
+    }
+}
+```
+

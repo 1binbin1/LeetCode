@@ -1,0 +1,66 @@
+> Problem: [149. 直线上最多的点数](https://leetcode.cn/problems/max-points-on-a-line/description/)
+
+[TOC]
+
+# 思路
+
+> 虽说可以用Ax+By=0（例如缀点成线那题），但是相对来说还是斜率好用（无非多判断一个垂直情况）。用例中有一个平行于x轴的几个点，斜率用double的话会出现-0.0！=0.0的情况，注意加条件即可。
+
+# 解题方法
+
+> 描述你的解题方法
+
+# 复杂度
+
+- 时间复杂度:
+
+> 添加时间复杂度, 示例： $O(n)$
+
+- 空间复杂度:
+
+> 添加空间复杂度, 示例： $O(n)$
+
+# Code
+
+* []
+
+```Java
+
+class Solution {
+    public int maxPoints(int[][] points){
+        int max = 0; //存储总的最大值
+        for(int i =0;i<points.length;i++){
+            int tmax = 0; //存储局部最大值
+            Map<Double,Integer> map = new HashMap<>();
+            int vertical = 0; //存储垂直的点的总数
+            for(int j = i+1;j<points.length;j++){
+                if(points[i][0] == points[j][0]){
+                    vertical ++; //垂直的点数量+1
+                }else{
+                    double k = (points[j][1] - points[i][1])*1.0/(points[j][0] - points[i][0]);
+                    if(k == -0.0){ //平行于x轴的特殊情况
+                        k = 0.0;
+                    }
+                    if(map.containsKey(k)){
+                        int count = map.get(k);
+                        count++;
+                        map.remove(k);
+                        map.put(k, count);//此步骤就是将同斜率的value+1
+                    }else{
+                        map.put(k, 1);
+                    }
+                }
+            }
+            for(double key:map.keySet()){
+                if(map.get(key) > tmax){
+                    tmax = map.get(key);
+                }
+            }
+            tmax = Math.max(tmax, vertical); //求出局部最大值
+            max = Math.max(tmax, max); //求出总的最大值
+        }
+        return max + 1; //加上第一个点！！
+    }
+}
+```
+

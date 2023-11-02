@@ -1,0 +1,85 @@
+思路和心得：
+
+# （一）模拟
+
+* []
+
+```python
+class Solution:
+    def largestGoodInteger(self, num: str) -> str:
+        n = len(num)
+        res = -1
+        for i in range(n - 3 + 1):
+            if num[i] == num[i + 1] == num[i + 2]:
+                res = max(res, int(num[i : i+3]))
+        
+        if res == -1:
+            return ''
+        if res == 0:
+            return '000'
+        return str(res)
+```
+
+* []
+
+```c++
+class Solution 
+{
+public:
+    string largestGoodInteger(string num) 
+    {
+        int n = (int)num.size();
+
+        int res = -1;
+        for (int i = 0; i < n - 3 + 1; i ++)
+        {
+            if (num[i] == num[i + 1] && num[i + 1] == num[i + 2])
+            {
+                res = max(res, stoi(num.substr(i, 3)));
+            }
+        }
+
+        if (res == -1)
+        {
+            return "";
+        }
+        if (res == 0)
+        {
+            return "000";
+        }
+        return to_string(res);
+    }
+};
+```
+
+* []
+
+```java
+class Solution 
+{
+    public String largestGoodInteger(String num) 
+    {
+        int n = num.length();
+
+        int res = -1;
+        for (int i = 0; i < n - 3 + 1; i ++)
+        {
+            if (num.charAt(i) == num.charAt(i + 1) && num.charAt(i + 1) == num.charAt(i + 2))
+            {
+                res = Math.max(res, Integer.parseInt(num.substring(i, i + 3)) );
+            }
+        }
+
+        if (res == -1)
+        {
+            return "";
+        }
+        if (res == 0)
+        {
+            return "000";
+        }
+        return "" + res;
+    }
+}
+```
+

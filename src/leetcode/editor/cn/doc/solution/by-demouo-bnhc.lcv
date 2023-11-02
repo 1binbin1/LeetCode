@@ -1,0 +1,51 @@
+# 思路
+
+题目要求只能使用加减法，那我们自然想到用减法实现除法，用“被减数”能减去几次“减数”来衡量最后的结果，这时候我们想到求x的幂次的快速解法，将x成倍成倍的求幂，这里将减数成倍成倍的增大，次数对应也是成倍成倍的增大，例如：**取a=23**，b=2，b的变化如下:2->4->8->16,次数count的变化如下1->2->4->8,最后a-b=23-16=7，**对7再执行一次**上述过程，b:2->4,count:1->2,a-b=3, 然后**对3再执行一次**，b:2,count:1,a-b=1，1已经小于原b=2，可以结束了，最后计数一下每轮的count是多少8+2+1=11，就是我们要的答案啦！
+
+# 注意事项
+
+1. 为方便运算，我们需要将a，b都转为同正or同负，由于INT_MIN转正就越界了，我们只好都转负，这也是都转负的原因
+2. 有一种特殊情况 INT_MIN/(-1)就overflow了 所以直接特殊处理
+3. 最终结果的正负
+
+* []
+
+```c++
+class Solution {
+public:
+    //利用减法实现除法 均已保证传入的a，b是负数  
+    unsigned int div(int a, int b) {
+       int res=0;
+       while(a<=b){//a的绝对值大
+           int temp=b;
+           unsigned int count=1;//a的绝对值大于b的 那么肯定a能减一次b
+           while(temp>=0xc0000000&&a<=temp+temp){//减数不越界方便控制后一个条件：且a的绝对值比两倍的减数还大
+           count+=count;//可以减的次数翻倍
+           temp+=temp;//减数也翻倍
+           }
+           res+=count;
+           a-=temp;
+       }
+       return res;
+    }
+
+    int divide(int a, int b) {
+        if (a == INT_MIN && b == -1) {
+            return INT_MAX;
+        }
+        bool positive=true;
+        if (a > 0) {
+            positive=!positive;
+            a = -a;
+        }
+        if (b > 0) {
+            positive=!positive;
+            b = -b;
+        }
+        unsigned int res = div(a, b);
+        return positive? res : -res;
+    }
+};
+
+```
+

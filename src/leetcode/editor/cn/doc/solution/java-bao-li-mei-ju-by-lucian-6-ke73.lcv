@@ -1,0 +1,60 @@
+根据题意和数据范围，很容易想到10^18的数，开根号为10^9，然后这个数又是个回文,通过枚举可以用10^5的范围枚举;
+直接暴力枚举即可
+
+* 
+
+```
+class Solution {
+    int n;
+    long l, r;
+    public int superpalindromesInRange(String left, String right) {
+        long max = (long)1e9;
+        this.l = Long.valueOf(left); 
+        this.r = Long.valueOf(right);
+        this.n = 100000;
+        int ans = 0;
+        for(int i = 1; i < n; i++){
+            String cur = String.valueOf(i);
+            StringBuilder sb = new StringBuilder(cur);
+            sb.append(new StringBuilder(cur).reverse());
+            long num = Long.valueOf(sb.toString());
+            long next = num * num;
+            if(next < l) continue;
+            if(next <= r){
+                String ss = String.valueOf(next);
+                boolean check = true;
+                int j = 0, k = ss.length() - 1;
+                while(j < k){
+                    if(ss.charAt(j) != ss.charAt(k)){
+                        check = false;
+                        break;
+                    }
+                    j++;
+                    k--;
+                }
+                if(check) ans++;
+            }
+            sb = new StringBuilder(cur);
+            sb.append(new StringBuilder(cur.substring(0, cur.length() - 1)).reverse());
+            num = Long.valueOf(sb.toString());
+            next = num * num;
+            if(next < l) continue;
+            if(next > r) break;
+            String ss = String.valueOf(next);
+            boolean check = true;
+            int j = 0, k = ss.length() - 1;
+            while(j < k){
+                if(ss.charAt(j) != ss.charAt(k)){
+                    check = false;
+                    break;
+                }
+                j++;
+                k--;
+            }
+            if(check) ans++;
+        }
+        return ans;
+    }
+}
+```
+

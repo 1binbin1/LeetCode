@@ -1,0 +1,12 @@
+* python3
+
+```python
+class Solution:
+    def matrixReshape(self, mat: List[List[int]], r: int, c: int) -> List[List[int]]:
+        if len(mat)*len(mat[0])==r*c:
+            mat2=[mat[i][j] for i in range(len(mat)) for j in range(len(mat[0]))]
+            return [[mat2[i] for i in range(c*j,c*j+c)]for j in range(r)]
+        else:
+            return mat
+```
+

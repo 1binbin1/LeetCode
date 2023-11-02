@@ -1,0 +1,103 @@
+### 方法一，哈希表
+
+**解题思路**
+
+由于同一个数字在两个数组中都可能出现多次，因此需要用哈希表存储每个数字出现的次数。对于一个数字，其在交集中出现的次数等于该数字在两个数组中出现次数的最小值。
+
+首先遍历第一个数组，并在哈希表中记录第一个数组中的每个数字以及对应出现的次数，然后遍历第二个数组，对于第二个数组中的每个数字，如果在哈希表中存在这个数字，则将该数字添加到答案，并减少哈希表中该数字出现的次数。
+
+为了降低空间复杂度，首先遍历较短的数组并在哈希表中记录每个数字以及对应出现的次数，然后遍历较长的数组得到交集。
+
+![350_fig1.gif](https://pic.leetcode.cn/1688562402-YYrSLk-350_fig1.gif)
+
+[参考](https://leetcode.cn/problems/intersection-of-two-arrays-ii/solution/liang-ge-shu-zu-de-jiao-ji-ii-by-leetcode-solution/)
+
+### 代码
+
+* []
+
+```Java
+class Solution {
+    public int[] intersect(int[] nums1, int[] nums2) {
+        if (nums1.length > nums2.length) {
+            return intersect(nums2, nums1);
+        }
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int x : nums1) {
+            map.put(x, map.getOrDefault(x, 0) + 1);
+        }
+        int[] res = new int[nums1.length];
+        int index = 0;
+        for (int x : nums2) {
+            int count = map.getOrDefault(x, 0);
+            if (count > 0) {
+                res[index++] = x;
+                count--;
+                if (count > 0) {
+                    map.put(x, count);
+                } else {
+                    map.remove(x);
+                }
+            }
+        }
+        return Arrays.copyOfRange(res, 0, index);
+    }
+}
+```
+
+**复杂度分析**
+
+- 时间复杂度：$O(m+n)$，其中 $m$ 和 $n$ 分别是两个数组的长度。需要遍历两个数组并对哈希表进行操作，哈希表操作的时间复杂度是 $O(1)$，因此总时间复杂度与两个数组的长度和呈线性关系。
+
+- 空间复杂度：$O(\min(m,n))$，其中 $m$ 和 $n$ 分别是两个数组的长度。对较短的数组进行哈希表的操作，哈希表的大小不会超过较短的数组的长度。为返回值创建一个数组 `intersection`，其长度为较短的数组的长度。
+
+### 方法二，排序 + 双指针
+
+**解题思路**
+
+如果两个数组是有序的，则可以使用双指针的方法得到两个数组的交集。
+
+首先对两个数组进行排序，然后使用两个指针遍历两个数组。
+
+初始时，两个指针分别指向两个数组的头部。每次比较两个指针指向的两个数组中的数字，如果两个数字不相等，则将指向较小数字的指针右移一位，如果两个数字相等，将该数字添加到答案，并将两个指针都右移一位。当至少有一个指针超出数组范围时，遍历结束。
+
+[参考](https://leetcode.cn/problems/intersection-of-two-arrays-ii/solution/liang-ge-shu-zu-de-jiao-ji-ii-by-leetcode-solution/)
+
+### 代码
+
+* []
+
+```Java
+class Solution {
+    public int[] intersect(int[] nums1, int[] nums2) {
+        Arrays.sort(nums1);
+        Arrays.sort(nums2);
+        int m = nums1.length, n = nums2.length;
+        int[] res = new int[Math.min(m, n)];
+        int i1 = 0, i2 = 0, i = 0;
+        while (i1 < m && i2 < n) {
+            if (nums1[i1] < nums2[i2]) {
+                i1++;
+            } else if (nums1[i1] > nums2[i2]) {
+                i2++;
+            } else {
+                res[i] = nums1[i1];
+                i1++;
+                i2++;
+                i++;
+            }
+        }
+        return Arrays.copyOfRange(res, 0, i);
+    }
+}
+```
+
+**复杂度分析**
+
+- 时间复杂度：$O(m \log m+n \log n)$，其中 $m$ 和 $n$ 分别是两个数组的长度。对两个数组进行排序的时间复杂度是 $O(m \log m+n \log n)$，遍历两个数组的时间复杂度是 $O(m+n)$，因此总时间复杂度是 $O(m \log m+n \log n)$。
+
+- 空间复杂度：$O(\min(m,n))$，其中 $m$ 和 $n$ 分别是两个数组的长度。为返回值创建一个数组 `intersection`，其长度为较短的数组的长度。不过在 `C++` 中，可以直接创建一个 `vector`，不需要把答案临时存放在一个额外的数组中，所以这种实现的空间复杂度为 $O(1)$。
+
+### 结语
+
+如果 $\textit{nums}_2$ 的元素存储在磁盘上，磁盘内存是有限的，并且不能一次加载所有的元素到内存中。那么就无法高效地对 $\textit{nums}_2$ 进行排序，因此推荐使用方法一而不是方法二。在方法一中，$\textit{nums}_2$ 只关系到查询操作，因此每次读取 $\textit{nums}_2$ 中的一部分数据，并进行处理即可。

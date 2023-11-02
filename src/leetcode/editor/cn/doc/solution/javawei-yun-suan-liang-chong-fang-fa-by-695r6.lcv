@@ -1,0 +1,38 @@
+### 解题思路
+
+若n为4的n次幂，则在二进制表示中，n只有一个1，且在偶数位上
+n应该满足两个条件：
+1：奇数位上不能有1
+2：是2的n次幂（n&（n-1））==0
+
+### 代码一
+
+* java
+
+```java
+class Solution {
+    public boolean isPowerOfFour(int n) {
+        if(n<=0) return false;
+        for(int i=1;i<32;i+=2){
+            if((n&(1<<i))!=0) return false;//奇数位上有1，不满足
+        }
+        return (n&(n-1))==0; 
+    }
+}
+```
+
+条件一可以用n&（0xAAAAAAAA)!=0表示(0xAAAAAAAA是...101010的16进制)
+
+### 代码二
+
+* java
+
+```java
+class Solution {
+    public boolean isPowerOfFour(int n) {
+        if(n<=0) return false;
+        return ((n & (n-1))==0) && ((n & 0xAAAAAAAA)==0);
+    }
+}
+```
+

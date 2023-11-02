@@ -1,0 +1,32 @@
+## 解法：枚举
+
+枚举将哪个数替换成哪个数即可。复杂度 $\mathcal{O}(|\Sigma|^2 \times \log n)$，其中 $|\Sigma| = 10$。
+
+## 参考代码（c++）
+
+* c++
+
+```c++
+class Solution {
+public:
+    int minMaxDifference(int num) {
+        int mx = num, mn = num;
+        // 把数拆成数位
+        vector<int> vec;
+        for (; num; num /= 10) vec.push_back(num % 10);
+        reverse(vec.begin(), vec.end());
+        // 枚举把所有 i 变成 j
+        for (int i = 0; i <= 9; i++) for (int j = 0; j <= 9; j++) {
+            int t = 0;
+            // 计算变化后的数
+            for (int x : vec) {
+                if (x == i) t = t * 10 + j;
+                else t = t * 10 + x;
+            }
+            mx = max(mx, t); mn = min(mn, t);
+        }
+        return mx - mn;
+    }
+};
+```
+

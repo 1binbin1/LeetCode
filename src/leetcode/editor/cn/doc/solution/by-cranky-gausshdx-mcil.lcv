@@ -1,0 +1,35 @@
+### 解题思路
+
+getOrDefault() 方法获取指定 key 对应对 value，如果找不到 key ，则返回设置的默认值。
+getOrDefault() 方法的语法为：
+hashmap.getOrDefault(Object key, V defaultValue)
+利用两个哈希表
+一个哈希表用来存储一个字符串中出现的字母和字母的个数
+另一个哈希表用来汇总保存字符对应的最大的那个key
+![image.png](https://pic.leetcode-cn.com/1665154260-uWacbm-image.png)
+
+### 代码
+
+* java
+
+```java
+class Solution {
+    public int minNumBooths(String[] demand) {
+    Map<Character,Integer>map=new HashMap<>();
+       int ans=0;
+		for(String s:demand) {
+			Map<Character,Integer>curmap=new HashMap<>();
+			for(char c:s.toCharArray()) {
+				Integer a1=curmap.getOrDefault(c,0)+1;
+				map.put(c,Math.max(a1,map.getOrDefault(c,0)));
+				curmap.put(c, a1);
+			}
+		}
+		for(Integer k:map.values()) {
+			ans+=k;
+		}
+		return ans;
+    }
+}
+```
+

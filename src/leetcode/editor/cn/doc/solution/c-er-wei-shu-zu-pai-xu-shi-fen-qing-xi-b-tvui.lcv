@@ -1,0 +1,61 @@
+> Problem: [2570. 合并两个二维数组 - 求和法](https://leetcode.cn/problems/merge-two-2d-arrays-by-summing-values/description/)
+
+# 思路
+
+元素范围在`1-1000`，因此直接用桶比较快。创建一个1001个元素的的int型桶`buckets`，初始化为0.  
+先扫描两个数组，第一个数组`nums1`，直接加入桶位；第二个数组，先判断下，如果桶位里不为0，就加上去，否则直接赋值。  
+然后扫描桶，把不为0的全都取出来。  
+最后排序。
+
+# Code
+
+* []
+
+```C
+// 二维数组排序，以第二维第一个元素为key进行升序排序
+int cmp(const void* a, const void* b) {
+    return (*(int**)a)[0] - (*(int**)b)[0];
+}
+
+/**
+ * Return an array of arrays of size *returnSize.
+ * The sizes of the arrays are returned as *returnColumnSizes array.
+ * Note: Both returned array and *columnSizes array must be malloced, assume caller calls free().
+ */
+int** mergeArrays(int** nums1, int nums1Size, int* nums1ColSize, int** nums2, int nums2Size, int* nums2ColSize, int* returnSize, int** returnColumnSizes){
+    int buckets[1001] = {0};
+    // 扫描两个数组，收集 id 和 val。id 就是下标。
+    for (int i = 0; i < nums1Size; i++) {
+        buckets[nums1[i][0]] = nums1[i][1];
+    }
+    for (int j = 0; j < nums2Size; j++) {
+        if (buckets[nums2[j][0]] != 0) {
+            buckets[nums2[j][0]] += nums2[j][1];
+        } else {
+            buckets[nums2[j][0]] = nums2[j][1];
+        }
+    }
+
+    int** ans = malloc(sizeof(int*) * 1001);
+    int p = 0; // 跟踪int**数组，尾指针。
+    *returnColumnSizes = malloc(sizeof(int) * 1001);
+
+    // 取出桶中所有不为0的元素，分配内存，记录id和val
+    for (int k = 0; k < 1001; k++) {
+        if (buckets[k] != 0) {
+            ans[p] = malloc(sizeof(int) * 2);
+            ans[p][0] = k;
+            ans[p][1] = buckets[k];
+            (*returnColumnSizes)[p] = 2;
+            p++;
+        }
+    }
+
+    // 最后按id排序
+    qsort(ans, p, sizeof(int*), cmp);
+
+    *returnSize = p;
+    return ans;
+}
+```
+

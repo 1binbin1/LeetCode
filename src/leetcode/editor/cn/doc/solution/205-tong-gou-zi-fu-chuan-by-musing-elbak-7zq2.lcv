@@ -1,0 +1,29 @@
+### 解题思路
+
+hash表，创建一个字典，遍历s字符串
+1.当s[i]不在dic中，继续判断
+（1）如果映射后的t[i]不在dic.values()中，继续向dic中添加映射关系。
+（2）如果t[i]已经被映射了，直接返回False
+2.当s[i]在dic中，只需要判断映射关系是否正确即可。
+
+### 代码
+
+* python3
+
+```python
+class Solution:
+    def isIsomorphic(self, s: str, t: str) -> bool:
+        if len(s)!=len(t):return False
+        #哈希表
+        dic={}
+        for i in range(len(s)):
+            if s[i] not in dic:
+                if t[i] not in dic.values():
+                    dic[s[i]]=t[i]
+                else:return False
+            else:
+                if t[i]!=dic[s[i]]:
+                    return False
+        return True
+```
+

@@ -1,0 +1,28 @@
+### 解题思路
+
+分析：想要求数组中的第k个最大元素，
+1.先将数组进行排序(升序)sort()
+2.然后再去其倒数第k个元素，就是数组中的第K个最大元素
+
+### 代码
+
+* java
+
+```java
+class Solution {
+    public int findKthLargest(int[] nums, int k) {
+        //像将数组排序
+        Arrays.sort(nums);
+        //最后一个元素的下标
+        int result = nums.length - 1;
+        //循环遍历倒数第k个就是第K个最大的元素
+        while (k != 0) {
+            //倒数最大的数
+            result--;
+            k--;
+        }
+        return nums[result + 1];
+    }
+}
+```
+

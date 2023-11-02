@@ -1,0 +1,54 @@
+类似题目：[剑指 Offer 66. 构建乘积数组](https://leetcode.cn/problems/gou-jian-cheng-ji-shu-zu-lcof/)
+
+【前缀和+后缀和思想 & 递推】
+
+- 方法1：
+  - 求出元素的前缀和、后缀和（都不包含该元素），二者相减取绝对值即为答案
+  - 两次遍历：前缀和一次正向遍历（存放的数组作为答案数组），后缀和一次逆向遍历（变量tmp动态记录当前后缀和的值，`tmp += b[i+1];`）并同步计算答案（`b[i] = abs(b[i] - tmp);`）
+  - 复杂度
+    - 时间复杂度：$O(n)$
+    - 空间复杂度：$O(1)$（答案数组不算）
+
+* c
+
+```c
+vector<int> leftRigthDifference(vector<int>& nums) {
+    vector<int> b(nums.size(), 0);
+    for(int i = 1; i< nums.size(); i++) b[i] = b[i-1] + nums[i-1];
+    int tmp = 0;
+    for(int i = nums.size()-2; i>= 0; i--){
+        tmp += nums[i+1];
+        b[i] = abs(b[i] - tmp);
+    }
+    return b;
+}
+```
+
+- 方法2：思维，递推
+  - 可得：
+    - `leftSum[i] = leftSum[i-1] + nums[i-1];`
+    - `rightSum[i] = rightSum[i-1] - nums[i];`
+  - 所以：
+    - 两个变量left，right分别动态维护leftSum[i]和rightSum[i]即可
+      - 也可以只开一个变量动态维护leftSum[i]-rightSum[i]
+    - 初始：`left(0) = 0，right(0) = sum{nums[1~(n-1)]}`
+  - 复杂度同理
+
+* c
+
+```c
+vector<int> leftRigthDifference(vector<int>& nums) {
+    int n = nums.size();
+    vector<int> res(n, 0);
+    int left = 0, right = 0;
+    for(int i = 1; i < n; i++) right += nums[i];
+    res[0] = abs(left - right);
+    for(int i = 1; i< n; i++){
+        left += nums[i-1];
+        right -= nums[i];
+        res[i] = abs(left - right);
+    }
+    return res;
+}
+```
+

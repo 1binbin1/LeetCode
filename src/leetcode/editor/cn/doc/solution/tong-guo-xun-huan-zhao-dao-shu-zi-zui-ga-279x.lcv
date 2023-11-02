@@ -1,0 +1,52 @@
+> Problem: [2566. 替换一个数字后的最大差值](https://leetcode.cn/problems/maximum-difference-by-remapping-a-digit/description/)
+
+[TOC]
+
+# 思路
+
+> 最小值：替换最高位数字为0，最大值：替换第一个最高位不为9的数字为9
+
+# Code
+
+* []
+
+```C
+
+int minMaxDifference(int num){
+    int max=0,min=0,firstnum,temp=num,i=0;
+    while(temp){
+        if(temp<10) {
+            firstnum = temp;//最高位数字
+            break;
+        }
+        i++;
+        temp /= 10;
+    }
+
+    temp=num;
+
+    int firstnum_max=firstnum;//用来防止最高位为9，则向下找到第一个不是9的数字
+    while(firstnum_max==9&&i){
+        temp -= 9*pow(10,i); 
+        i--;
+        firstnum_max = temp/pow(10,i);
+    }
+
+    temp=num;
+    i=0;
+
+    while(temp){
+        int a = temp % 10;
+        if(a==firstnum) min+=0;//最小值：替换最高位数字为0
+        else min+=a*pow(10,i);
+
+        if(a==firstnum_max) max+=9*pow(10,i);//最大值：替换最高位不为9的数字为9
+        else max+=a*pow(10,i);
+        temp /= 10;
+        i++;
+    }
+    printf("%d %d",max,min);
+    return max-min;
+}
+```
+

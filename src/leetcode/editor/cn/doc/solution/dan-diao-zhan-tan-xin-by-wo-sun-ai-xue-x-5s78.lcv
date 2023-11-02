@@ -1,0 +1,37 @@
+* 
+
+```
+class Solution {
+//采用回溯算法，面对每一个元素我们可以选or不选(但是感觉时间复杂度会超)
+//动态规划也有点乏力
+//单调栈+贪心算法：维护一个递减单调栈，如果遇到大于栈顶的元素，则将栈顶元素作为偶数，栈底元素作为奇数，然后清空栈
+//特别的有：如果栈内元素只有一个且遇到了大于它的元素，则它不可以作为栈底，我们应该出栈它入栈新元素
+//此外，当结束遍历的时候，我们应该将栈底作为奇数，而抛弃栈顶(因为nums中数字皆为正数)
+public:
+    long long maxAlternatingSum(vector<int>& nums) {
+        long long res = 0;
+        stack<int> s;   //reduce stack
+        for(auto &num : nums){
+            //s is empty or s'top greater than num could direct push
+            if(s.empty() || s.top() > num) s.push(num);
+            //if s'size < 2 we should keep the first elem greater than the second elem
+            else if(s.size() == 1 && s.top() < num) s.top() = num;
+            //if not we need pop all the elem and let res + s'bottom - s'top
+            else{
+                res -= s.top();
+                while(s.size() > 1) s.pop();
+                res += s.top();
+                s.top() = num;
+            }
+        }
+        //if s is not empty we shoule let res + s'bottom
+        if(!s.empty()){
+            while(s.size() > 1) s.pop();
+            res += s.top(); 
+        }
+
+        return res;
+    }
+};
+```
+

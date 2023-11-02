@@ -1,0 +1,30 @@
+# **- 思路**
+
+**双指针逐项比较添加。**
+
+时间44 ms击败27.81%；内存15 MB击败96.14%
+
+* []
+
+```python
+class Solution:
+    def mergeArrays(self, nums1: List[List[int]], nums2: List[List[int]]) -> List[List[int]]:
+        l1, l2, len1, len2, lst = 0, 0, len(nums1), len(nums2), []
+        while l1 < len1 and l2 < len2:
+            if   nums1[l1][0] > nums2[l2][0]: 
+                lst.append(nums2[l2])
+                l2 += 1
+            elif nums1[l1][0] < nums2[l2][0]: 
+                lst.append(nums1[l1])
+                l1 += 1
+            else:
+                lst.append([nums1[l1][0], nums1[l1][1] + nums2[l2][1]])
+                l1 += 1
+                l2 += 1
+        if l1 == len1: return lst + nums2[l2:]
+        if l2 == len2: return lst + nums1[l1:] 
+        return lst
+```
+
+**↓ 觉得不错的话，欢迎点赞、评论、收藏！ ^_^**
+

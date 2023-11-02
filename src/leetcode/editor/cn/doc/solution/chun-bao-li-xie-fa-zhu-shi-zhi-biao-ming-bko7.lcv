@@ -1,0 +1,34 @@
+* 
+
+```
+
+int maxPoints(int** points, int pointsSize, int* pointsColSize){
+    int ret = 1;
+
+    for(int i = 0; i<pointsSize; i++) {
+        for(int j = i+1; j<pointsSize; j++) {
+            int count = 2;
+            double k, b;
+
+            if(points[i][0] - points[j][0] == 0) {
+                for(int k = j+1; k<pointsSize; k++) {
+                    if(points[i][0] == points[k][0]) count++;
+                }
+            }
+            else {
+                // k = (points[i][1] - points[j][1])*1.0/(points[i][0] - points[j][0]);
+                b = points[i][1] - points[i][0] * (points[i][1] - points[j][1])*1.0/(points[i][0] - points[j][0]);
+
+                for(int m = j+1; m<pointsSize; m++) {//浮点运算真是奇妙，不能直接用k,由于与之相乘的数可能能与x1-x2约掉一部分，直接用k会造成不精确
+                    if(points[m][0] * (points[i][1] - points[j][1])*1.0/(points[i][0] - points[j][0]) + b ==  points[m][1]) count++;
+                }
+            }
+
+            if(ret < count) ret = count;
+        }
+    }
+
+    return ret;
+}
+```
+

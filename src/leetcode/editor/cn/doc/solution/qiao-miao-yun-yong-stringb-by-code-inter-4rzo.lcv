@@ -1,0 +1,25 @@
+确定好滑动界限，整体移动，截取字段，注意为0的情况
+
+* 
+
+```
+class Solution {
+    public int divisorSubstrings(int num, int k) {
+        String str = String.valueOf(num);
+        int L = 0;
+        int R = k;
+        int N = str.length();
+        int count = 0;
+        while (R<=N){
+            String sub = str.substring(L, R);
+            if(Integer.parseInt(sub)!=0&& num% Integer.parseInt(sub)==0){
+                count++;
+            }
+            L++;
+            R++;
+        }
+        return count;
+    }
+}
+```
+

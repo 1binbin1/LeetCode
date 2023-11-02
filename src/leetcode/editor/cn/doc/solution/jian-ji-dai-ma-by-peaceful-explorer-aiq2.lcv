@@ -1,0 +1,80 @@
+### 解题思路
+
+执行结果：通过 显示详情 > 你的代码真是无敌了！
+执行用时：2 ms, 在所有 Java 提交中击败了 100.00% 的用户
+
+![1911. Maximum Alternating Subsequence Sum - submitted result.png](https://pic.leetcode.cn/1689029777-ZKoMtW-1911.%20Maximum%20Alternating%20Subsequence%20Sum%20-%20submitted%20result.png)
+
+这道题和122. 买卖股票的最佳时机 II很象。不同的地方是在题122中你手上还没有股票，要在最佳时机买股票然后再卖出以求得最大利润；而这道题就象你手上已经有一支股票，要在最佳时机卖、然后有可能还再买和卖以求得最大利润。我们在题122的基础上稍微做点数据转换就可以得到题1911的解题方法了。首先我们看题122的代码。
+
+### 题122 代码
+
+* java
+
+```java
+
+class Solution {
+    public int maxProfit(int[] prices) {
+        int maxProfit = 0;
+        for(int i = 1; i < prices.length; ++i){
+            if(prices[i] > prices[i-1])
+                maxProfit += prices[i] - prices[i-1];      
+        }
+        return maxProfit;
+    }
+}
+
+```
+
+在题1911中，我们在数组nums前添加一个0的数据把它变成数组prices，然后就可以直接调用122的代码了。需要注意的是1911的数据和数据量比122要大，返回结果的变量要用long类型。
+
+### 题1911 代码1
+
+* java
+
+```java
+
+class Solution {
+    public long maxAlternatingSum(int[] nums) {      
+        int n = nums.length;
+        int[] prices = new int[n+1];
+        for(int i = 0; i < n; ++i)
+           prices[i+1] = nums[i];
+           
+        long maxProfit = 0;
+        for(int i = 1; i < prices.length; ++i){
+            maxProfit += Math.max(prices[i] - prices[i-1], 0);      
+        }
+        return maxProfit;
+    }
+}
+
+```
+
+当然我们也可以不用在数组nums前加0把它转换成数组prices。我们可以用变量pre = 0 来实现在数组前添加一个数为0的情况。
+
+### 题1911 代码2
+
+* java
+
+```java
+
+class Solution {
+    public long maxAlternatingSum(int[] nums) {      
+    
+         if(nums.length == 1) 
+              return nums[0];
+         
+         int pre = 0;
+         long sum = 0;
+         for(int x:nums){
+             sum += Math.max(x - pre, 0);
+             pre = x;
+         }
+         
+         return sum;
+    }
+}
+
+```
+

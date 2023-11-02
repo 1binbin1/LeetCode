@@ -1,0 +1,38 @@
+**解题思路**
+
+根据题意,用num,去整除num上的每一位数字,如果能整除就满足条件
+
+求最后一位 tmp % 10
+
+进一位tmp /=10
+
+**代码实现**
+
+* 
+
+```
+public List<Integer> selfDividingNumbers(int left, int right) {
+    List<Integer> ans=new ArrayList<>();
+    for(int i=left;i<=right;i++){
+        if(isSelf(i)){
+            ans.add(i);
+        }
+    }
+    return ans;
+}
+public boolean isSelf(int num){
+    int tmp=num;
+    while(tmp != 0){
+        int r = tmp % 10;
+        if(r == 0 || num % r != 0)
+            return false;
+        tmp /=10;
+    }
+    return true;
+}
+```
+
+如果有帮助到你，请给题解点个赞和收藏，让更多的人看到.
+
+欢迎你 [关注我](https://mp.weixin.qq.com/s/Ci2ufId3PPSZPsgm7gOIzw) 和 加入我们的「组队打卡」小群
+

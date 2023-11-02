@@ -1,0 +1,102 @@
+### 写法一：构造一整行 + 动态插入
+
+1. 如果知道vector的长度，先reserve一下避免内存动态增长；
+2. 每一行（`vector< int >`）的构造使用了vector构造函数的[第5个重载](https://zh.cppreference.com/w/cpp/container/vector/vector)：
+
+* cpp
+
+```cpp
+template< class InputIt >
+vector( InputIt first, InputIt last, const Allocator& alloc = Allocator() );
+```
+
+### 代码
+
+* []
+
+```C++
+class Solution {
+public:
+	vector< vector< int > > construct2DArray( const vector< int > &original, int m, int n )
+	{
+		if( original.size() != m * n )
+			return {};
+
+		vector< vector< int > > ary2;
+		ary2.reserve( m );
+
+		auto data = original.data();
+		for( int i{}; i < m; ++i, data += n )
+			ary2.emplace_back( data, data + n );
+		
+		return ary2;
+	}
+};
+```
+
+### 写法二：预分配 + 内存拷贝
+
+事先按m行、n列完全构造二维数组（元素默认初始化都为0），然后利用vector内存连续的特性，将原数组的内容逐行拷贝。
+`注：C++11开始，取vector首地址的方法不再是对第一个元素取址，而是调用其成员函数data()`
+
+### 代码
+
+* []
+
+```C++
+class Solution {
+public:
+	vector< vector< int > > construct2DArray( const vector< int > &original, int m, int n )
+	{
+		if( original.size() != m * n )
+			return {};
+
+		vector< vector< int > > ary2( m, vector< int >( n ) );
+		auto data = original.data();
+
+		for( int i{}, bytes = n * sizeof( int ); i < m; ++i, data += n )
+			memcpy( ary2[ i ].data(), data, bytes );
+		
+		return ary2;
+	}
+};
+```
+
+### 其他
+
+上面只列出两种简洁且性能比较好的写法，此外还有用双重循环构造（不如写法一）、单下标转双下标的逐元素复制（`ary2[i / n][i % n] = original[i]`，不如内存复制快）等写法。
+
+### 扩展：C++多维数组
+
+以动态二维数组为例，普通的构造和析构是逐行分配逐行删除：
+
+* cpp
+
+```cpp
+	int **ary2 = new int*[ m ];
+	for( int i = 0; i < m; ++i )
+		ary2[ i ] = new int[ n ];
+
+	for( int i = 0; i < m; ++i )
+		delete[] ary2[ i ];
+	delete[] ary2;
+```
+
+但C++中的delete其实是一个非常慢的函数（所以很多大厂有自己的malloc和内存池），你会发现一个数组析构往往要花不少时间。所以当数组尺寸比较大时，多维数组往往不是这样实现的，而是使用一维数组变相地实现多维数组。还是以二维数组为例：
+
+* cpp
+
+```cpp
+	int **ary2 = new int*[ m ];
+	ary2[ 0 ] = new int[ m * n ];
+
+	for( int i = 1; i < m; ++i )
+		ary2[ i ] = ary2[ i - 1 ] + n;
+
+	delete[] ary2[ 0 ];
+	delete[] ary2;
+	ary2 = nullptr;
+```
+
+直白的说，就是把全部内容（内存）放在第一行，后面每一行做一个偏移，使用起来仍然是`ary2[ i ][ j ]`这样子，但是析构只delete第一行就行了，性能比第一种至少快一个数量级。
+

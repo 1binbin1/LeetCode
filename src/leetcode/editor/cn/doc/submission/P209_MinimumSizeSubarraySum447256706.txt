@@ -1,0 +1,44 @@
+    class Solution {
+        /**
+         * 长度最小的连续子数组
+         * 思路：
+         * 1、滑动窗口
+         * 2、控制起始位置和结束位置，只要和大于target就改变起始位置直到小于target
+         * 3、当结束位置到数组终点即停止
+         *
+         * @param target
+         * @param nums
+         * @return
+         */
+        public int minSubArrayLen(int target, int[] nums) {
+            int result = Integer.MAX_VALUE;
+            // 滑动窗口的数值之和
+            int sum = 0;
+            // 滑动窗口的起始位置
+            int i = 0;
+            // 滑动窗口的长度
+            int subLength;
+            // j是结束位置
+            for (int j = 0; j < nums.length; j++) {
+                sum += nums[j];
+                // 每次更新i并计算和，只要大于等于target的就缩小窗口大小
+                while (sum >= target) {
+                    subLength = j - i + 1;
+                    result = Math.min(result, subLength);
+                    // 不断变更i（起始位置）
+                    sum -= nums[i++];
+                }
+            }
+            return result == Integer.MAX_VALUE ? 0 : result;
+        }
+    }
+
+//runtime:1 ms
+//memory:52.2 MB
+//total_testcases:21
+//total_correct:21
+//input_formatted:
+//expected_output:
+//code_output:
+//runtime_error:
+//last_testcase:

@@ -1,0 +1,77 @@
+**一、第一个问题，为什么要将queries放在一个二维数组里面，用来记录queries[i] 和 i？**
+因为为了减少复杂度，我们需要将intervals和queries排序，但是答案数组的下标是和queries的下标一一对应的，排序之后下标就打乱了，所以需要不打乱下标的排序，也就是
+
+* 
+
+```
+int[][] que = new int[queries.length][2];
+for(int i = 0; i < queries.length; ++i) {
+    que[i][0] = queries[i];
+    que[i][1] = i;
+}
+Arrays.sort(que, (o1, o2) -> (o1[0] - o2[0]));
+```
+
+很好，又引出了一个新问题，为什么要排序呢？
+
+**二、第二个问题，为什么要排序呢？**
+试想一下，如果我们不排序，就要搜索每个queries[i]，再搜索每个intervals，去找到符合条件的区间的最短长度，复杂度是O(mn)。但是，如果我们将他们两个都排序，如果有intervals[i][1] < que[j][0]，也就是某个区间的右边界小于当前的位置，那么之后的que[j+1][0]等都不会在这个区间里面，因此这个区间就被丢弃，不再使用
+**三、第三个问题，我们要找到最短的区间，并且存储所有还可能符合条件的区间，怎么办呢？**
+优先级队列！！！！
+
+* 
+
+```
+PriorityQueue<int[]> queue = new PriorityQueue<int[]>((o1, o2) -> (o1[1] - o1[0] - o2[1] + o2[0]));
+```
+
+很好，看代码吧，如果哪个地方没有说清楚，请大家在评论区多多批评指正！！！
+
+* 
+
+```
+class Solution {
+    public int[] minInterval(int[][] intervals, int[] queries) {
+        //将区间按区间头从小到大排序
+        Arrays.sort(intervals, (o1, o2) -> (o1[0] - o2[0]));
+        //记录queries以及i，也就是queries[i]和i
+        int[][] que = new int[queries.length][2];
+        for(int i = 0; i < queries.length; ++i) {
+            que[i][0] = queries[i];
+            que[i][1] = i;
+        }
+        //将值排序，小的在前
+        Arrays.sort(que, (o1, o2) -> (o1[0] - o2[0]));
+        int[] res = new int[queries.length];
+        Arrays.fill(res, -1);
+        //优先级队列，区间长度小的区间优先，在队列头
+        PriorityQueue<int[]> queue = new PriorityQueue<int[]>((o1, o2) -> (o1[1] - o1[0] - o2[1] + o2[0]));
+        //记录第几个区间，因为intervals和queries都是排好序的，所以用index记录目前走到哪里了
+        int index = 0;
+        for(int i = 0; i < queries.length; ++i) {
+            //先把区间左边界小于等于queries[i]的区间加进去
+            while(index < intervals.length && que[i][0] >= intervals[index][0]) {
+                queue.offer(new int[]{intervals[index][0], intervals[index][1]});
+                index += 1;
+            }
+            //再把区间右边界小于queries[i]的区间删除
+            while(!queue.isEmpty() && queue.peek()[1] < que[i][0]) {
+                queue.poll();
+            }
+            /*
+            为什么不需要动index？
+            正如上面的注释，intervals和queries都是排好序的
+            如果这个区间不合适被删除了，是因为这个区间是在queries[i]的左面，但是之后的queries[i + 1]都比queries[i]大
+            所以这个区间在以后肯定也不合适，就删除了，不再要了
+            */
+            if(!queue.isEmpty()) {
+                int[] t = queue.peek();
+                res[que[i][1]] = t[1] - t[0] + 1;  
+            }
+        }
+        return res;
+
+    }
+}
+```
+

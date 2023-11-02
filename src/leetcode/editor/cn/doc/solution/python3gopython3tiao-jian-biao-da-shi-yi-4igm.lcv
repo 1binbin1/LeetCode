@@ -1,0 +1,57 @@
+> Problem: [771. 宝石与石头](https://leetcode.cn/problems/jewels-and-stones/description/)
+
+# 思路
+
+1. 遍历 stones 中的每个字符 stone。
+2. 使用条件表达式 stone in jewels 来检查字符 stone 是否在字符串 jewels 中存在。
+3. 如果 stone 在 jewels 中，那么条件表达式返回 True，然后生成器表达式 1 for stone in stones if stone in jewels 将返回值为1的元素。
+4. 使用 sum() 函数对生成的元素进行求和，得到最终的结果，即出现在 jewels 中的字符在 stones 中的总数。
+
+# 复杂度
+
+- 时间复杂度：
+
+遍历 stones 中的每个字符需要O(n)的时间，其中n是 stones 字符串的长度。
+对于每个字符 stone，在 jewels 中使用 stone in jewels 进行查找，最坏情况下需要O(m)的时间，其中m是 jewels 字符串的长度。
+因此，总的时间复杂度为O(n * m)，其中n和m分别是 stones 和 jewels 字符串的长度。
+
+- 空间复杂度：
+
+代码中并没有使用额外的数据结构来存储临时变量，只有生成器表达式和sum函数生成的临时元素。这些临时元素不会占用额外的空间，而是在内部进行计算。
+因此，空间复杂度为O(1)，是常数级别的。
+
+需要注意的是，尽管 in 操作在Python中在一些情况下可能具有线性时间复杂度，但在实际应用中，jewels 字符串通常非常短，因此总体上该算法的时间复杂度在实际情况下可能是可以接受的。
+
+# Code
+
+* []
+
+```Python
+class Solution:
+    def numJewelsInStones(self, jewels: str, stones: str) -> int:
+        return sum(1 for stone in stones if stone in jewels)
+```
+
+![image.png](https://pic.leetcode.cn/1690132952-ZyaSox-image.png)
+
+* []
+
+```go
+func numJewelsInStones(jewels string, stones string) int {
+    jewelsMap := make(map[rune]bool)
+    for _, jewel := range jewels {
+        jewelsMap[jewel] = true
+    }
+
+    count := 0
+    for _, stone := range stones {
+        if jewelsMap[stone] {
+            count++
+        }
+    }
+
+    return count
+}
+```
+
+![image.png](https://pic.leetcode.cn/1690132958-AmplEh-image.png)

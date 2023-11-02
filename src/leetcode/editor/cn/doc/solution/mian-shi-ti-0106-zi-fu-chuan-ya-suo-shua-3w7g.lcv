@@ -1,0 +1,161 @@
+## 解题思路
+
+根据题意，需要将「连续相同字符」压缩为「字符+出现次数」的格式，例如：
+
+$$
+aaa \rightarrow a3 , b \rightarrow b1 , aabbb \rightarrow a2b3
+$$
+
+![ccw-01-06.001.png](https://pic.leetcode-cn.com/1638377048-wXAPoR-ccw-01-06.001.png)
+
+考虑借助双指针 $i$ , $j$ 解题，算法流程为：
+
+- 令 $i$ 指向字符串的「首个字符」， $j$ 向前遍历，直到访问到「不同字符」时停止，此时 $j - i$ 便是「首个字符」的连续出现次数，即可完成首个字符的压缩操作。
+- 接下来，从下个字符开始，重复以上操作，直到遍历完成即可。
+- 根据题目要求，最终返回「原字符串」和「压缩字符串」中长度较短的那个。
+
+> 如下图所示，为示例字符串 `S = "aabcccccaaa"` 的算法执行过程。
+
+<![ccw-01-06.002.png](https://pic.leetcode-cn.com/1638377048-FUixNo-ccw-01-06.002.png),![ccw-01-06.003.png](https://pic.leetcode-cn.com/1638377048-NHiItw-ccw-01-06.003.png),![ccw-01-06.004.png](https://pic.leetcode-cn.com/1638377048-dqptHx-ccw-01-06.004.png),![ccw-01-06.005.png](https://pic.leetcode-cn.com/1638377048-acxbYK-ccw-01-06.005.png),![ccw-01-06.006.png](https://pic.leetcode-cn.com/1638377048-pikwXz-ccw-01-06.006.png),![ccw-01-06.007.png](https://pic.leetcode-cn.com/1638377048-lkunLw-ccw-01-06.007.png),![ccw-01-06.008.png](https://pic.leetcode-cn.com/1638377048-MHZTCh-ccw-01-06.008.png),![ccw-01-06.009.png](https://pic.leetcode-cn.com/1638377048-nmgwKV-ccw-01-06.009.png),![ccw-01-06.010.png](https://pic.leetcode-cn.com/1638377048-SgHYRz-ccw-01-06.010.png),![ccw-01-06.011.png](https://pic.leetcode-cn.com/1638377048-YTRjOc-ccw-01-06.011.png),![ccw-01-06.012.png](https://pic.leetcode-cn.com/1638377048-bJFKqF-ccw-01-06.012.png),![ccw-01-06.013.png](https://pic.leetcode-cn.com/1638377048-GcEVmo-ccw-01-06.013.png),![ccw-01-06.014.png](https://pic.leetcode-cn.com/1638377048-iiUoTO-ccw-01-06.014.png),![ccw-01-06.015.png](https://pic.leetcode-cn.com/1638377048-ztyalC-ccw-01-06.015.png),![ccw-01-06.016.png](https://pic.leetcode-cn.com/1638377048-ZgVyMN-ccw-01-06.016.png),![ccw-01-06.017.png](https://pic.leetcode-cn.com/1638377048-KmJHyp-ccw-01-06.017.png),![ccw-01-06.018.png](https://pic.leetcode-cn.com/1638377048-vnvSMM-ccw-01-06.018.png),![ccw-01-06.019.png](https://pic.leetcode-cn.com/1638377048-ZgVyMN-ccw-01-06.019.png),![ccw-01-06.020.png](https://pic.leetcode-cn.com/1638377048-MaHCIL-ccw-01-06.020.png),![ccw-01-06.021.png](https://pic.leetcode-cn.com/1638377048-gAYIJm-ccw-01-06.021.png),![ccw-01-06.022.png](https://pic.leetcode-cn.com/1638377048-mwxpDi-ccw-01-06.022.png),![ccw-01-06.023.png](https://pic.leetcode-cn.com/1638377048-zEnbtM-ccw-01-06.023.png),![ccw-01-06.024.png](https://pic.leetcode-cn.com/1638377048-KhmtYe-ccw-01-06.024.png),![ccw-01-06.025.png](https://pic.leetcode-cn.com/1638377048-DigMMq-ccw-01-06.025.png),![ccw-01-06.026.png](https://pic.leetcode-cn.com/1638377048-PsaXnr-ccw-01-06.026.png),![ccw-01-06.027.png](https://pic.leetcode-cn.com/1638377048-ZOdTCG-ccw-01-06.027.png),![ccw-01-06.028.png](https://pic.leetcode-cn.com/1638377048-JOKDWf-ccw-01-06.028.png),![ccw-01-06.029.png](https://pic.leetcode-cn.com/1638377048-QUkXJE-ccw-01-06.029.png),![ccw-01-06.030.png](https://pic.leetcode-cn.com/1638377048-uWbTFV-ccw-01-06.030.png),![ccw-01-06.031.png](https://pic.leetcode-cn.com/1638377048-thQQnq-ccw-01-06.031.png),![ccw-01-06.032.png](https://pic.leetcode-cn.com/1638377048-ulIPff-ccw-01-06.032.png),![ccw-01-06.033.png](https://pic.leetcode-cn.com/1638377048-WkwByt-ccw-01-06.033.png),![ccw-01-06.034.png](https://pic.leetcode-cn.com/1638377048-YiqlES-ccw-01-06.034.png),![ccw-01-06.035.png](https://pic.leetcode-cn.com/1638377048-etWyqe-ccw-01-06.035.png),![ccw-01-06.036.png](https://pic.leetcode-cn.com/1638377048-DqsbCC-ccw-01-06.036.png),![ccw-01-06.037.png](https://pic.leetcode-cn.com/1638377048-UmXDNS-ccw-01-06.037.png)>
+
+## 代码
+
+为提升字符串拼接效率，需要选择 `res` 合适的数据结构。
+
+- **Python ：** 不推荐使用字符串直接 `res += s[i]`  拼接，在 Python 中字符串是「不可变对象」，每次字符串拼接都会生成一个新字符串，效率低下。推荐使用列表，先将结果按照顺序添加，最终返回前拼接为字符串，因此只需要一次拼接操作。
+- **Java ：** 不推荐直接使用 `String` 类，原因与 Python 相同。推荐使用 `StringBuilder` 类，为字符串拼接操作量身打造，最终返回前调用 `StringBuilder.toSting()` 方法转化为字符串即可。
+- **C++ ：** 在 C++ 中字符串是「可变」的，可直接使用 `string` 高效率拼接字符串。但需注意，拼接字符串 `a` 和 `b` 时， 方法 `a = a + b` 会生成新的 string 对象（耗时高），方法 `a += b` 是在原对象后直接添加，后者效率更高。
+
+> 后三个 Tab 为「代码注释解析」。
+
+* []
+
+```Python
+class Solution:
+    def compressString(self, S: str) -> str:
+        i, j, ls = 0, 0, len(S)
+        res = []
+        while i < ls:
+            while j < ls and S[i] == S[j]:
+                j += 1
+            res.append(S[i])
+            res.append(str(j - i))
+            i = j
+        res = ''.join(res)
+        return res if len(res) < ls else S
+```
+
+* []
+
+```Java
+class Solution {
+    public String compressString(String S) {
+        int i = 0, j = 0, ls = S.length();
+        StringBuilder res = new StringBuilder();
+        while (i < ls) {
+            while (j < ls && S.charAt(i) == S.charAt(j))
+                j++;
+            res.append(S.charAt(i)).append(j - i);
+            i = j;
+        }
+        return res.length() < ls ? res.toString() : S;
+    }
+}
+```
+
+* []
+
+```C++
+class Solution {
+public:
+    string compressString(string S) {
+        int i = 0, j = 0, ls = S.length();
+        string res;
+        while (i < ls) {
+            while (j < ls && S[i] == S[j])
+                j++;
+            res += S[i];
+            res += to_string(j - i);
+            i = j;
+        }
+        return res.length() < ls ? res : S;
+    }
+};
+```
+
+* []
+
+```Python
+class Solution:
+    def compressString(self, S: str) -> str:
+        i, j, ls = 0, 0, len(S)
+        res = []
+        # 「外层循环」i 指向每个首次出现的字符
+        while i < ls:
+            # 「内层循环」j 向前遍历，直到字符串末尾或找到与 s[i] 不同的字符时跳出
+            while j < ls and S[i] == S[j]:
+                j += 1
+            # 压缩字符串，添加至 res
+            res.append(S[i])
+            res.append(str(j - i))
+            # 令 i 指向下一个首次出现的字符
+            i = j
+        # 将列表拼接为字符串
+        res = ''.join(res)
+        # 对比「压缩字符串」和「原字符串」长度，返回较短的
+        return res if len(res) < ls else S
+```
+
+* []
+
+```Java
+class Solution {
+    public String compressString(String S) {
+        int i = 0, j = 0, ls = S.length();
+        StringBuilder res = new StringBuilder();
+        // 「外层循环」i 指向每个首次出现的字符
+        while (i < ls) {
+            // 「内层循环」j 向前遍历，直到字符串末尾或找到与 s[i] 不同的字符时跳出
+            while (j < ls && S.charAt(i) == S.charAt(j))
+                j++;
+            // 压缩字符串，添加至 res
+            res.append(S.charAt(i)).append(j - i);
+            // 令 i 指向下一个首次出现的字符
+            i = j;
+        }
+        // 对比「压缩字符串」和「原字符串」长度，返回较短的
+        return res.length() < ls ? res.toString() : S;
+    }
+}
+```
+
+* []
+
+```C++
+class Solution {
+public:
+    string compressString(string S) {
+        int i = 0, j = 0, ls = S.length();
+        string res;
+        // 「外层循环」i 指向每个首次出现的字符
+        while (i < ls) {
+            // 「内层循环」j 向前遍历，直到字符串末尾或找到与 s[i] 不同的字符时跳出
+            while (j < ls && S[i] == S[j])
+                j++;
+            // 压缩字符串，添加至 res
+            res += S[i];
+            res += to_string(j - i);
+            // 令 i 指向下一个首次出现的字符
+            i = j;
+        }
+        // 对比「压缩字符串」和「原字符串」长度，返回较短的
+        return res.length() < ls ? res : S;
+    }
+};
+```
+
+## 复杂度分析
+
+**时间复杂度 $O(N)$ ：** 其中 $N$ 为输入字符串 $S$ 长度。指针 $i$ , $j$ 皆完成一次字符串遍历，循环 $N + N = 2N$ 次，使用 $O(N)$ 线性时间。
+
+**空间复杂度 $O(N)$ ：** $res$ 用于临时存储压缩结果。最差情况下（当原字符串的所有相邻字符都不同时，$a \rightarrow a1$ 一个变两个），压缩字符串的长度为 $2N$，占用 $O(2N) = O(N)$ 大小的额外空间。

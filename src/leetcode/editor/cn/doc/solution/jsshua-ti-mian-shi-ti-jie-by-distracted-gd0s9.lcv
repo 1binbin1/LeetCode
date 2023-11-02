@@ -1,0 +1,30 @@
+* 
+
+```
+var maxPoints = function(points) {
+    const len = points.length;
+    if(len === 1) return 1;
+    // let map = new Map();
+    let max = 0;
+    for(let i = 0; i < len; i++) {
+        let map = new Map();
+        const itemI = points[i];
+        for(let j = i+1; j < len; j++) {
+            const itemJ = points[j];
+            let key = null;
+            if(itemJ[1] - itemI[1] === 0) {
+                key = `${itemJ[1]}/0`;
+            } else {
+                key = (itemJ[0] - itemI[0]) / (itemJ[1] - itemI[1]);
+            }
+            const val = map.has(key) ? map.get(key) + 1 : 2
+            map.set(key, val);
+            max = Math.max(max, val);
+        }
+    }
+    return max;
+};
+
+```
+
+[刷题视频](https://xiaochen1024.com/series/6196129fc1553b002e57bef5)

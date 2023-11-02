@@ -1,0 +1,93 @@
+### 解题思路
+
+用一个栈来存储累加的值
+
+### 代码
+
+* java
+
+```java
+class Solution {
+    public int[] leftRigthDifference(int[] nums) {
+        Stack<Integer> stack = new Stack<>();
+        int[] left = new int[nums.length];
+        int[] right = new int[nums.length];
+
+        for (int i = 0; i < nums.length; i++) {
+            if (stack.isEmpty()) {
+                stack.push(0);
+                left[0] = 0;
+            } else {
+                Integer top = stack.pop();
+                left[i] = top + nums[i - 1];
+                stack.push(left[i]);
+            }
+        }
+
+        if (!stack.isEmpty()) stack.clear();
+
+        for (int i = nums.length - 1; i >= 0; i--) {
+            if (stack.isEmpty()) {
+                stack.push(0);
+                right[right.length - 1] = 0;
+            } else {
+                Integer top = stack.pop();
+                right[i] = top + nums[i + 1];
+                stack.push(right[i]);
+            }
+        }
+
+        for (int i = 0; i < nums.length; i++) {
+            nums[i] = (left[i] - right[i]) < 0 ? -(left[i] - right[i]) : (left[i] - right[i]);
+        }
+
+        return nums;
+    }
+}
+```
+
+### 运行结果
+
+![屏幕截图 2023-02-27 112559.jpg](https://pic.leetcode.cn/1677468379-TbeKmG-%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202023-02-27%20112559.jpg)
+
+### 解题思路
+
+用一个临时变量来存储累加的值
+
+### 代码
+
+* java
+
+```java
+class Solution {
+    public int[] leftRigthDifference(int[] nums) {
+       int[] left = new int[nums.length];
+        int[] right = new int[nums.length];
+        int temp = 0;
+
+        for (int i = 1; i < nums.length; i++) {
+            temp += nums[i - 1];
+            left[i] = temp;
+        }
+
+        temp = 0;
+        for (int i = nums.length - 1; i >= 0; i--) {
+            if (i == nums.length - 1) continue;
+            temp += nums[i + 1];
+            right[i] = temp;
+
+
+        }
+
+        for (int i = 0; i < nums.length; i++) {
+            nums[i] = Math.abs(left[i] - right[i]);
+        }
+
+        return nums;
+    }
+}
+```
+
+### 运行结果
+
+![屏幕截图 2023-02-27 112401.jpg](https://pic.leetcode.cn/1677468285-oRVnAG-%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202023-02-27%20112401.jpg)

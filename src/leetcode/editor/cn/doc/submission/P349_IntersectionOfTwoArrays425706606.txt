@@ -1,0 +1,18 @@
+class Solution {
+    public int[] intersection(int[] nums1, int[] nums2) {
+        HashSet<Integer> set = new HashSet<>();
+        for (int j : nums1) {
+            set.add(j);
+        }
+        HashSet<Integer> result = new HashSet<>();
+        for (int j : nums2) {
+            if (set.contains(j)) {
+                result.add(j);
+            }
+        }
+        return result.stream().mapToInt(Integer::intValue).toArray();
+    }
+}
+
+//runtime:4 ms
+//memory:41.4 MB

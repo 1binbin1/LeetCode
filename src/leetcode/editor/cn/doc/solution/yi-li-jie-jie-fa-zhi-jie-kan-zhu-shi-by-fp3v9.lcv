@@ -1,0 +1,46 @@
+> Problem: [LCP 66. 最小展台数量](https://leetcode.cn/problems/600YaG/description/)
+
+[TOC]
+
+# 思路
+
+看注释就可
+
+# Code
+
+* []
+
+```JavaScript
+
+/**
+ * @param {string[]} demand
+ * @return {number}
+ */
+var minNumBooths = function (demand) {
+    let res = 0 // 方便展台需求总数，方便直接返回
+    let obj = {} // 记录每个展示台需要的数量
+    demand.forEach(item => {
+        // 深拷贝，防止后续的计算影响到原来的obj
+        let obj2 = JSON.parse(JSON.stringify(obj)) 
+        for (let i = 0; i < item.length; i++) {
+            // 如果当前展台类型不存在
+            if (obj[item[i]] == null) {
+                res++
+                obj[item[i]] = 1 // 初始化展台属性，且赋值为1
+            } else {
+                // 如果需要的展台存在且数量不为0，则obj2数量-1
+                if (obj2[item[i]] >= 1) {
+                    obj2[item[i]]--
+                } else {
+                    // 如果数量为0，则原始的obj数量不够用，则值+1
+                    obj[item[i]]++
+                    res++
+                }
+            }
+        }
+        console.log(obj)
+    })
+    return res
+};
+```
+

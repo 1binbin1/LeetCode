@@ -1,0 +1,39 @@
+**周赛的第一题哲学：** 不要思考，怎么傻怎么来！
+
+枚举所有的替换情况，计算最大值和最小值。由于替换总共只有 $90$ 种，而数字长度最长只有 $9$，因此复杂度小于 $100000$，可以快速解决问题。
+
+#### 暴力代码如下——
+
+* []
+
+```python
+class Solution:
+    def minMaxDifference(self, num: int) -> int:
+        str_num = str(num)
+        m, M = inf, 0
+        for i in range(10):
+            for j in range(10):
+                new = int(str_num.replace(str(i), str(j)))
+                m = min(m, new)
+                M = max(M, new)
+        return M - m
+```
+
+如果要真正分析问题，为了得到最小数，应当将最高位变为 $0$ （由于最高位非零）；为了得到最大数，将从高到低第一个非 $9$ 的数变为 $9$ 。
+
+#### 具体代码如下——
+
+* []
+
+```python
+class Solution:
+    def minMaxDifference(self, num: int) -> int:
+        str_num = str(num)
+        minimum = int(str_num.replace(str_num[0], '0'))
+        n = len(str_num)
+        for i in range(n):
+            if str_num[i] != '9':
+                return int(str_num.replace(str_num[i], '9')) - minimum
+        return num # 全部数字均为 9 时返回本身即可
+```
+

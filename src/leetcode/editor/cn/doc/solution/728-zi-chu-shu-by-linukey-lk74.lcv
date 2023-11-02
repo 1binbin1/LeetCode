@@ -1,0 +1,29 @@
+* 
+
+```
+class Solution {
+public:
+    vector<int> selfDividingNumbers(int left, int right) {
+        vector<int> res;
+        for (int i = left; i <= right; ++i) {
+            bool judge = true;
+
+            int num = i;
+            while (num) {
+                int b = num - num / 10 * 10;
+                if (!b || i % b != 0) {
+                    judge = false;
+                    break;
+                }
+                num /= 10;
+            }
+
+            if (judge) {
+                res.push_back(i);
+            }
+        }
+        return res;
+    }
+};
+```
+

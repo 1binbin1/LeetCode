@@ -1,0 +1,235 @@
+视频讲解：[【基础算法精讲 15】](https://www.bilibili.com/video/BV1xG4y1F7nC/)，制作不易，欢迎点赞~
+
+# 方法一：枚举下一个数选哪个
+
+* [sol1-Python3]
+
+```py
+class Solution:
+    def combinationSum3(self, k: int, n: int) -> List[List[int]]:
+        ans = []
+        path = []
+        def dfs(i: int, t: int) -> None:
+            d = k - len(path)  # 还要选 d 个数
+            if t < 0 or t > (i * 2 - d + 1) * d // 2:  # 剪枝
+                return
+            if d == 0:
+                ans.append(path.copy())
+                return
+            for j in range(i, d - 1, -1):
+                path.append(j)
+                dfs(j - 1, t - j)
+                path.pop()
+        dfs(9, n)
+        return ans
+```
+
+* [sol1-Java]
+
+```java
+class Solution {
+    private int k;
+    private final List<Integer> path = new ArrayList<>();
+    private final List<List<Integer>> ans = new ArrayList<>();
+
+    public List<List<Integer>> combinationSum3(int k, int n) {
+        this.k = k;
+        dfs(9, n);
+        return ans;
+    }
+
+    private void dfs(int i, int t) {
+        int d = k - path.size(); // 还要选 d 个数
+        if (t < 0 || t > (i * 2 - d + 1) * d / 2) // 剪枝
+            return;
+        if (d == 0) {
+            ans.add(new ArrayList<>(path));
+            return;
+        }
+        for (int j = i; j >= d; --j) {
+            path.add(j);
+            dfs(j - 1, t - j);
+            path.remove(path.size() - 1);
+        }
+    }
+}
+```
+
+* [sol1-C++]
+
+```cpp
+class Solution {
+public:
+    vector<vector<int>> combinationSum3(int k, int n) {
+        vector<vector<int>> ans;
+        vector<int> path;
+        function<void(int, int)> dfs = [&](int i, int t) {
+            int d = k - path.size(); // 还要选 d 个数
+            if (t < 0 or t > (i * 2 - d + 1) * d / 2) // 剪枝
+                return;
+            if (d == 0) {
+                ans.emplace_back(path);
+                return;
+            }
+            for (int j = i; j >= d; --j) {
+                path.push_back(j);
+                dfs(j - 1, t - j);
+                path.pop_back();
+            }
+        };
+        dfs(9, n);
+        return ans;
+    }
+};
+```
+
+* [sol1-Go]
+
+```go
+func combinationSum3(k, n int) (ans [][]int) {
+    path := []int{}
+    var dfs func(int, int)
+    dfs = func(i, t int) {
+        d := k - len(path) // 还要选 d 个数
+        if t < 0 || t > (i*2-d+1)*d/2 { // 剪枝
+            return
+        }
+        if d == 0 {
+            ans = append(ans, append([]int(nil), path...))
+            return
+        }
+        for j := i; j >= d; j-- {
+            path = append(path, j)
+            dfs(j-1, t-j)
+            path = path[:len(path)-1]
+        }
+    }
+    dfs(9, n)
+    return
+}
+```
+
+#### 复杂度分析
+
+- 时间复杂度：分析回溯问题的时间复杂度，有一个通用公式：**路径长度**$\times$**搜索树的叶子数**。对于本题，它等于 $O(k\cdot C(9,k))$（去掉剪枝就是 [77. 组合](https://leetcode.cn/problems/combinations/)）。
+- 空间复杂度：$O(k)$。
+
+# 方法二：选或不选
+
+* [sol2-Python3]
+
+```py
+class Solution:
+    def combinationSum3(self, k: int, n: int) -> List[List[int]]:
+        ans = []
+        path = []
+        def dfs(i: int, t: int) -> None:
+            d = k - len(path)  # 还要选 d 个数
+            if t < 0 or t > (i * 2 - d + 1) * d // 2:  # 剪枝
+                return
+            if d == 0:
+                ans.append(path.copy())
+                return
+            # 不选 i
+            if i > d: dfs(i - 1, t)
+            # 选 i
+            path.append(i)
+            dfs(i - 1, t - i)
+            path.pop()
+        dfs(9, n)
+        return ans
+```
+
+* [sol2-Java]
+
+```java
+class Solution {
+    private int k;
+    private final List<Integer> path = new ArrayList<>();
+    private final List<List<Integer>> ans = new ArrayList<>();
+
+    public List<List<Integer>> combinationSum3(int k, int n) {
+        this.k = k;
+        dfs(9, n);
+        return ans;
+    }
+
+    private void dfs(int i, int t) {
+        int d = k - path.size(); // 还要选 d 个数
+        if (t < 0 || t > (i * 2 - d + 1) * d / 2) // 剪枝
+            return;
+        if (d == 0) {
+            ans.add(new ArrayList<>(path));
+            return;
+        }
+        // 不选 i
+        if (i > d) dfs(i - 1, t);
+        // 选 i
+        path.add(i);
+        dfs(i - 1, t - i);
+        path.remove(path.size() - 1);
+    }
+}
+```
+
+* [sol2-C++]
+
+```cpp
+class Solution {
+public:
+    vector<vector<int>> combinationSum3(int k, int n) {
+        vector<vector<int>> ans;
+        vector<int> path;
+        function<void(int, int)> dfs = [&](int i, int t) {
+            int d = k - path.size(); // 还要选 d 个数
+            if (t < 0 or t > (i * 2 - d + 1) * d / 2) // 剪枝
+                return;
+            if (d == 0) {
+                ans.emplace_back(path);
+                return;
+            }
+            // 不选 i
+            if (i > d) dfs(i - 1, t);
+            // 选 i
+            path.push_back(i);
+            dfs(i - 1, t - i);
+            path.pop_back();
+        };
+        dfs(9, n);
+        return ans;
+    }
+};
+```
+
+* [sol2-Go]
+
+```go
+func combinationSum3(k, n int) (ans [][]int) {
+    path := []int{}
+    var dfs func(int, int)
+    dfs = func(i, t int) {
+        d := k - len(path) // 还要选 d 个数
+        if t < 0 || t > (i*2-d+1)*d/2 { // 剪枝
+            return
+        }
+        if d == 0 {
+            ans = append(ans, append([]int(nil), path...))
+            return
+        }
+        // 不选 i
+        if i > d {
+            dfs(i-1, t)
+        }
+        // 选 i
+        path = append(path, i)
+        dfs(i-1, t-i)
+        path = path[:len(path)-1]
+    }
+    dfs(9, n)
+    return
+}
+```
+
+#### 复杂度分析
+
+[见此](https://leetcode.cn/problems/combinations/solutions/1815859/dfs-suan-fa-de-fu-za-du-fen-xi-by-hqztru-14v8/)。

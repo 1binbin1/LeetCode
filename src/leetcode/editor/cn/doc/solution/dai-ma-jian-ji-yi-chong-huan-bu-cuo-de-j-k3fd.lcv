@@ -1,0 +1,40 @@
+[详细刷题视频合集](https://xiaochen1024.com/series/6196129fc1553b002e57bef5/6196208ec1553b002e57bef6)      
+[刷题笔记](https://xiaochen1024.com/courseware/60b4f11ab1aa91002eb53b18)
+创建一个二维数组保存最后的重塑数组(矩阵)
+
+然后遍历原来数组(矩阵)的每一个元素，并且在遍历的过程中将元素插入到最后的结果数组 ret 中
+
+只要注意换行的时机就可以(换行的时机就是 ret 中每一个数组的个数都到达 c 了)
+
+* 
+
+```
+var matrixReshape = function(nums, r, c) {
+    //最后的结果ret是一个 r * c 的二维数组(注意：JS 中没有二维数组的概念，需要自己创建二维数组对象)
+    //首先JS创建二维数组的方法不能直接new Array[][]，
+    //而是要先new一个一维数组，再把这个一维数组的每一个元素都 new 为一个数组
+    const ret = new Array(r);
+    for (let i = 0; i < r; i++) {
+        ret[i] = new Array(c);
+    }
+    //基本情况，不能重塑的情况
+    if (nums.length * nums[0].length != r * c) {
+        return nums;
+    }
+    //在迭代过程中直接就把元素插入到重塑数组中
+    let rows = 0, cols = 0;
+    for (let i = 0; i < nums.length; i++) {
+        for (let j = 0; j < nums[i].length; j++) {
+            ret[rows][cols] = nums[i][j];
+            cols++;
+            //如果列数到了(每一行的个数等于c的时候，换行，并且cols从0 开始)
+            if (cols == c) {
+                rows++;
+                cols = 0;
+            }
+        }
+    }
+    return ret;
+};
+```
+
